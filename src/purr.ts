@@ -1,9 +1,9 @@
 const audio = new Audio('/purr.mp3');
 audio.preload = 'auto';
 
-let fadeTimer = null;
+let fadeTimer: ReturnType<typeof setInterval> | null = null;
 
-export function playPurr() {
+export function playPurr(): void {
   if (fadeTimer) {
     clearInterval(fadeTimer);
     fadeTimer = null;
@@ -24,7 +24,7 @@ export function playPurr() {
       step++;
       audio.volume = Math.max(0, 1 - step / fadeSteps);
       if (step >= fadeSteps) {
-        clearInterval(fadeTimer);
+        clearInterval(fadeTimer!);
         fadeTimer = null;
         audio.pause();
       }
