@@ -60,7 +60,7 @@ function CatCheckbox({ checked, onToggle, taskText }: CatCheckboxProps) {
             <path d="M52,20 Q58,8 54,6 Q51,5 44,13 Z" fill="var(--cat-ear-inner)" />
             <path d="M18,30 Q22,26 26,30" stroke="var(--cat-features)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
             <path d="M38,30 Q42,26 46,30" stroke="var(--cat-features)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-            <path d="M30,37 L32,39 L34,37 Z" fill="var(--cat-nose)" />
+            <path d="M28,36 L32,41 L36,36 Z" fill="var(--cat-nose)" />
             <path d="M26,41 Q32,47 38,41" stroke="var(--cat-features)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
             <line x1="2" y1="34" x2="16" y2="36" stroke="var(--cat-features)" strokeWidth="1" />
             <line x1="2" y1="40" x2="16" y2="40" stroke="var(--cat-features)" strokeWidth="1" />
@@ -78,7 +78,7 @@ function CatCheckbox({ checked, onToggle, taskText }: CatCheckboxProps) {
             <ellipse cx="42" cy="30" rx="3" ry="4" fill="var(--cat-features)" />
             <ellipse cx="22" cy="29" rx="1" ry="1.2" fill="white" />
             <ellipse cx="42" cy="29" rx="1" ry="1.2" fill="white" />
-            <path d="M30,37 L32,39 L34,37 Z" fill="var(--cat-nose)" />
+            <path d="M28,36 L32,41 L36,36 Z" fill="var(--cat-nose)" />
             <path d="M28,42 Q32,44 36,42" stroke="var(--cat-features)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
             <line x1="2" y1="34" x2="16" y2="36" stroke="var(--cat-features)" strokeWidth="1" />
             <line x1="2" y1="40" x2="16" y2="40" stroke="var(--cat-features)" strokeWidth="1" />
