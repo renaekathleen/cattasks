@@ -1,0 +1,290 @@
+:root {
+  --cat-color: #f4a83d;
+  --cat-ear-inner: #f48fb1;
+  --cat-features: #3e2723;
+  --cat-nose: #f48fb1;
+  --bg: #faf5ee;
+  --surface: #ffffff;
+  --text: #2d2013;
+  --text-muted: #9e8e7e;
+  --border: #e8ddd0;
+  --accent: #f4a83d;
+  --accent-hover: #e6952e;
+  --danger: #e57373;
+  --danger-hover: #d32f2f;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+#root {
+  width: 100%;
+  max-width: 540px;
+}
+
+.app {
+  width: 100%;
+}
+
+/* Header */
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.app-header h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.title-cat {
+  display: inline-block;
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Input form */
+.add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.task-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.task-input:focus {
+  border-color: var(--accent);
+}
+
+.task-input::placeholder {
+  color: var(--text-muted);
+}
+
+.add-btn {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.add-btn:hover {
+  background: var(--accent-hover);
+}
+
+.add-btn:active {
+  transform: scale(0.96);
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.stats-divider {
+  opacity: 0.3;
+}
+
+/* Task list */
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.75rem;
+  transition: border-color 0.2s, opacity 0.3s, transform 0.2s;
+  box-shadow: var(--shadow);
+}
+
+.task-item:hover {
+  border-color: var(--accent);
+}
+
+.task-item.completed {
+  opacity: 0.7;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Cat checkbox */
+.cat-checkbox {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.cat-checkbox:hover {
+  transform: scale(1.15);
+  background: rgba(244, 168, 61, 0.1);
+}
+
+.cat-checkbox.checked {
+  --cat-color: #81c784;
+  --cat-ear-inner: #c8e6c9;
+}
+
+.cat-checkbox.purring {
+  animation: purr-vibrate 0.08s linear infinite;
+}
+
+.purr-text {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  animation: purr-float 0.7s ease-out forwards;
+  pointer-events: none;
+}
+
+.task-text {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  line-height: 1;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+  opacity: 0;
+}
+
+.task-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  color: var(--danger-hover);
+  background: rgba(229, 115, 115, 0.1);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+}
+
+.empty-cat {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  animation: wiggle 3s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+}
+
+@keyframes purr-vibrate {
+  0% { transform: translateX(-1px) scale(1.15); }
+  50% { transform: translateX(1px) scale(1.15); }
+  100% { transform: translateX(-1px) scale(1.15); }
+}
+
+@keyframes purr-float {
+  0% {
+    opacity: 1;
+    top: -4px;
+  }
+  100% {
+    opacity: 0;
+    top: -22px;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .app-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .task-item {
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .delete-btn {
+    opacity: 0.5;
+  }
+}
