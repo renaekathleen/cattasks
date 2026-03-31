@@ -1,50 +1,33 @@
-let audioCtx = null;
+const audio = new Audio('/purr.mp3');
+audio.preload = 'auto';
 
-function getAudioContext() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  return audioCtx;
-}
+let fadeTimer = null;
 
 export function playPurr() {
-  const ctx = getAudioContext();
-  const now = ctx.currentTime;
-  const duration = 0.7;
+  if (fadeTimer) {
+    clearInterval(fadeTimer);
+    fadeTimer = null;
+  }
 
-  const osc1 = ctx.createOscillator();
-  const osc2 = ctx.createOscillator();
-  const lfo = ctx.createOscillator();
-  const lfoGain = ctx.createGain();
-  const gainNode = ctx.createGain();
+  audio.currentTime = 0;
+  audio.volume = 1;
+  audio.play();
 
-  osc1.type = 'sine';
-  osc1.frequency.setValueAtTime(28, now);
+  const fadeStart = 1000;
+  const fadeDuration = 500;
+  const fadeSteps = 20;
+  const stepMs = fadeDuration / fadeSteps;
 
-  osc2.type = 'sine';
-  osc2.frequency.setValueAtTime(56, now);
-
-  lfo.type = 'sine';
-  lfo.frequency.setValueAtTime(26, now);
-  lfoGain.gain.setValueAtTime(8, now);
-
-  lfo.connect(lfoGain);
-  lfoGain.connect(osc1.frequency);
-  lfoGain.connect(osc2.frequency);
-
-  gainNode.gain.setValueAtTime(0, now);
-  gainNode.gain.linearRampToValueAtTime(0.3, now + 0.05);
-  gainNode.gain.setValueAtTime(0.3, now + duration - 0.15);
-  gainNode.gain.linearRampToValueAtTime(0, now + duration);
-
-  osc1.connect(gainNode);
-  osc2.connect(gainNode);
-  gainNode.connect(ctx.destination);
-
-  osc1.start(now);
-  osc2.start(now);
-  lfo.start(now);
-  osc1.stop(now + duration);
-  osc2.stop(now + duration);
-  lfo.stop(now + duration);
+  setTimeout(() => {
+    let step = 0;
+    fadeTimer = setInterval(() => {
+      step++;
+      audio.volume = Math.max(0, 1 - step / fadeSteps);
+      if (step >= fadeSteps) {
+        clearInterval(fadeTimer);
+        fadeTimer = null;
+        audio.pause();
+      }
+    }, stepMs);
+  }, fadeStart);
 }

@@ -1,8 +1,14 @@
-# React + Vite
+# CatTasks
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A little cute to-do list app where each task has a cat checkbox. Click the cat to complete a task and it purrs.
 
-Currently, two official plugins are available:
+I made this because I had a dream about it. In reality, my girlfriend's cat was purring next to my head while I slept and it made its way into my dream.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Tasks are saved to localStorage, so they stick around between sessions — no backend, no accounts, just cats.
+
+## Running it
+
+```
+npm install
+npm run dev
+```
