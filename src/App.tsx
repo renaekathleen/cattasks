@@ -1,8 +1,29 @@
-import { useState, useRef, type FormEvent } from 'react';
+import { useState, useEffect, useRef, type FormEvent, type Dispatch, type SetStateAction } from 'react';
 import { playPurr } from './purr';
-import { useAuth } from './auth';
-import { useTasks } from './use-tasks';
 import './App.css';
+
+interface Task {
+  id: number;
+  text: string;
+  completed: boolean;
+}
+
+function useLocalStorage<T>(key: string, initialValue: T): [T, Dispatch<SetStateAction<T>>] {
+  const [value, setValue] = useState<T>(() => {
+    try {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : initialValue;
+    } catch {
+      return initialValue;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+}
 
 interface CatCheckboxProps {
   checked: boolean;
@@ -72,8 +93,7 @@ function CatCheckbox({ checked, onToggle, taskText }: CatCheckboxProps) {
 }
 
 function App() {
-  const { isSignedIn, signIn, signOut, userName, userPhoto } = useAuth();
-  const { tasks, loading, add, toggle, remove } = useTasks();
+  const [tasks, setTasks] = useLocalStorage<Task[]>('cattasks', []);
   const [newTask, setNewTask] = useState('');
   const [announcement, setAnnouncement] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -83,27 +103,33 @@ function App() {
     requestAnimationFrame(() => setAnnouncement(message));
   };
 
-  const addTask = async (e: FormEvent) => {
+  const addTask = (e: FormEvent) => {
     e.preventDefault();
     const text = newTask.trim();
     if (!text) return;
-    await add(text);
+    setTasks((prev) => [
+      ...prev,
+      { id: Date.now(), text, completed: false },
+    ]);
     setNewTask('');
     inputRef.current?.focus();
     announce(`Task added: ${text}`);
   };
 
-  const toggleTask = async (id: string) => {
-    const task = tasks.find((t) => t.id === id);
-    await toggle(id);
-    if (task) {
-      announce(task.completed ? `Uncompleted: ${task.text}` : `Completed: ${task.text}`);
-    }
+  const toggleTask = (id: number) => {
+    setTasks((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        const toggled = { ...t, completed: !t.completed };
+        announce(toggled.completed ? `Completed: ${t.text}` : `Uncompleted: ${t.text}`);
+        return toggled;
+      })
+    );
   };
 
-  const deleteTask = async (id: string) => {
+  const deleteTask = (id: number) => {
     const task = tasks.find((t) => t.id === id);
-    await remove(id);
+    setTasks((prev) => prev.filter((t) => t.id !== id));
     if (task) announce(`Deleted: ${task.text}`);
   };
 
@@ -114,21 +140,8 @@ function App() {
     <div className="app">
       <header className="app-header">
         <h1>
-          <span aria-hidden="true">🐱</span> CatTasks
+          <span aria-hidden="true">🐱</span> Cat Tasks
         </h1>
-        <div className="auth-bar">
-          {isSignedIn ? (
-            <div className="user-info">
-              {userPhoto && <img src={userPhoto} alt="" className="user-photo" />}
-              <span className="user-name">{userName}</span>
-              <button className="auth-btn" onClick={signOut} type="button">Sign out</button>
-            </div>
-          ) : (
-            <button className="auth-btn google-btn" onClick={signIn} type="button">
-              Sign in with Google
-            </button>
-          )}
-        </div>
       </header>
 
       <form className="add-form" onSubmit={addTask} role="search">
@@ -148,13 +161,7 @@ function App() {
         </button>
       </form>
 
-      {loading && (
-        <div className="loading-state">
-          <p>Loading tasks...</p>
-        </div>
-      )}
-
-      {!loading && tasks.length > 0 && (
+      {tasks.length > 0 && (
         <div className="stats" aria-live="polite" aria-atomic="true">
           <span>{pendingCount} pending</span>
           <span className="stats-divider" aria-hidden="true">|</span>
@@ -162,30 +169,28 @@ function App() {
         </div>
       )}
 
-      {!loading && (
-        <ul className="task-list" aria-label="Tasks">
-          {tasks.map((task) => (
-            <li key={task.id} className={`task-item ${task.completed ? 'completed' : ''}`}>
-              <CatCheckbox
-                checked={task.completed}
-                onToggle={() => toggleTask(task.id)}
-                taskText={task.text}
-              />
-              <span className="task-text">{task.text}</span>
-              <button
-                className="delete-btn"
-                onClick={() => deleteTask(task.id)}
-                aria-label={`Delete: ${task.text}`}
-                type="button"
-              >
-                ×
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className="task-list" aria-label="Tasks">
+        {tasks.map((task) => (
+          <li key={task.id} className={`task-item ${task.completed ? 'completed' : ''}`}>
+            <CatCheckbox
+              checked={task.completed}
+              onToggle={() => toggleTask(task.id)}
+              taskText={task.text}
+            />
+            <span className="task-text">{task.text}</span>
+            <button
+              className="delete-btn"
+              onClick={() => deleteTask(task.id)}
+              aria-label={`Delete: ${task.text}`}
+              type="button"
+            >
+              ×
+            </button>
+          </li>
+        ))}
+      </ul>
 
-      {!loading && tasks.length === 0 && (
+      {tasks.length === 0 && (
         <div className="empty-state">
           <svg className="empty-cat" viewBox="-5 -5 120 70" width="120" height="70" aria-hidden="true" focusable="false">
             <g transform="translate(2, 4) rotate(-10, 22, 26)">
