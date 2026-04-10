@@ -4,6 +4,8 @@ A little cute to-do list app where each task has a cat checkbox. Click the cat t
 
 I made this because I had a dream about it. In reality, my girlfriend's cat was purring next to my head while I slept and it made its way into my dream.
 
+![CatTasks demo](https://cdn.zappy.app/5fbba4741148a9468a85046c9adfabb8.gif)
+
 Tasks are saved to localStorage by default. Sign in with Google to sync with Google Tasks.
 
 ## Running it
