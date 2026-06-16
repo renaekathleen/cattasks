@@ -8,9 +8,9 @@ I made this because I had a dream about it. In reality, my girlfriend's cat was 
 
 ![CatTasks demo](https://cdn.zappy.app/5fbba4741148a9468a85046c9adfabb8.gif)
 
-Tasks are saved to localStorage, so they stick around between sessions — no backend, no accounts, just cats.
+Tasks are saved to localStorage. Future integration with Google Keep, maybe.
 
-## Running it
+## Running it locally.
 
 ```
 npm install
